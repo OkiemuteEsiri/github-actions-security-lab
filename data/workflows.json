@@ -1,0 +1,43 @@
+[
+  {
+    "name": "build-and-test",
+    "trigger": "pull_request",
+    "permissions": ["contents:read"],
+    "actions": [
+      {"source": "actions/checkout", "ref": "11bd71901bbe5b1630ceea73d27597364c9af683"},
+      {"source": "actions/setup-python", "ref": "42375524e23c412d93fb67b49958b491fce71c38"}
+    ],
+    "uses_long_lived_secret": false,
+    "deploys": false,
+    "protected_environment": false,
+    "checks_out_pr_head": false,
+    "shell_expressions": []
+  },
+  {
+    "name": "unsafe-release-example",
+    "trigger": "pull_request_target",
+    "permissions": ["contents:write", "packages:write"],
+    "actions": [
+      {"source": "actions/checkout", "ref": "v4"},
+      {"source": "vendor/release-action", "ref": "main"}
+    ],
+    "uses_long_lived_secret": true,
+    "deploys": true,
+    "protected_environment": false,
+    "checks_out_pr_head": true,
+    "shell_expressions": ["echo ${{ github.event.pull_request.title }}"]
+  },
+  {
+    "name": "protected-deploy",
+    "trigger": "push",
+    "permissions": ["contents:read", "id-token:write"],
+    "actions": [
+      {"source": "actions/checkout", "ref": "11bd71901bbe5b1630ceea73d27597364c9af683"}
+    ],
+    "uses_long_lived_secret": false,
+    "deploys": true,
+    "protected_environment": true,
+    "checks_out_pr_head": false,
+    "shell_expressions": []
+  }
+]
